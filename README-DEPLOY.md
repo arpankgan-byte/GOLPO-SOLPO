@@ -1,6 +1,6 @@
 # Golpo Solpo — public website and ordering update
 
-This package opens with the welcome/story experience, then uses the site's existing demo login screen before entering the restaurant homepage. Staff access remains separate at the PIN-protected `/panel/` and server-side API. The front-end demo login is not secure authentication and must not be used to protect private data. It also updates the menu category copy, removes the unverified crown/highest-price marker, clarifies that WhatsApp reservations still need to be sent and confirmed, and replaces the newsletter's simulated success with a consent-based database signup. For link previews, `og-image.jpg` is the 1200×630 share image referenced by the root page's Open Graph and Twitter Card metadata.
+This package opens with the welcome/story experience, then uses the site's existing demo login screen before entering the restaurant homepage. Staff access remains separate at the PIN-protected `/panel/` and server-side API. The front-end demo login is not secure authentication and must not be used to protect private data. It also updates the menu category copy, removes the unverified crown/highest-price marker, clarifies that WhatsApp reservations still need to be sent and confirmed, and replaces the newsletter's simulated success with a consent-based database signup. For link previews, `og-image.jpg` is the 1200×630 share image referenced by the root page's Open Graph and Twitter Card metadata. The 12 table QR cards are in `table-qr-codes/`, with a printable sheet at `Golpo-Solpo-12-Table-QR-Codes.pdf`. Each QR starts at `/welcome?table=N`; the selected table is retained through welcome → login → homepage and appended to the order link.
 
 ## Deploy
 
@@ -22,7 +22,7 @@ The reservation form opens a prefilled WhatsApp message. The guest must send it 
 ## Routes and checks
 
 - `/` — opens the welcome/story experience.
-- `/welcome` — welcome/story experience; use its main-site button to continue through the login screen to the restaurant homepage.
+- `/welcome` — welcome/story experience; optional `?table=N` carries table context through login to the order page.
 - `/order/` — table ordering (QR links may use `/order/?table=1`, `/order/?table=2`, etc.).
 - `/panel/` — staff order panel protected by `ADMIN_PIN`.
 - `/api/orders` — order API; staff reads/status changes require the PIN.
