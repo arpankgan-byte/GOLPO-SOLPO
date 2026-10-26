@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/welcome", "destination": "/" },
+    { "source": "/welcome/", "destination": "/" },
+    { "source": "/home", "destination": "/" },
+    { "source": "/login", "destination": "/" },
+    { "source": "/login/", "destination": "/" },
+    { "source": "/404.html", "destination": "/" },
+    { "source": "/order", "destination": "/order/" },
+    { "source": "/panel", "destination": "/panel/" }
+  ]
+}

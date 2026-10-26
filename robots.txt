@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /panel/
+Sitemap: https://golpo-solpo-2.vercel.app/sitemap.xml

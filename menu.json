@@ -217,25 +217,25 @@
   },
   {
     "id": 37,
-    "category": "Chefs Special",
+    "category": "Chef's Specials",
     "name": "Lemon Rice",
     "price": 220
   },
   {
     "id": 38,
-    "category": "Chefs Special",
+    "category": "Chef's Specials",
     "name": "Garlic Fried Rice",
     "price": 200
   },
   {
     "id": 39,
-    "category": "Chefs Special",
+    "category": "Chef's Specials",
     "name": "Lahori Mutton Curry",
     "price": 480
   },
   {
     "id": 40,
-    "category": "Chefs Special",
+    "category": "Chef's Specials",
     "name": "Chicken Tikka Masala",
     "price": 200
   },

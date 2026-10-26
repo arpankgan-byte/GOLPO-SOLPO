@@ -1,18 +1,32 @@
-# Golpo Solpo live ordering files
+# Golpo Solpo — public website and ordering update
 
-This package adds an **Order from your table** floating button to the existing site, a menu/order page at `/order/`, a PIN-protected order panel at `/panel/`, and a Vercel serverless API at `/api/orders`. The API uses the Neon `DATABASE_URL` environment variable and creates its order table the first time it runs.
+This package keeps the restaurant homepage public by default, preserves the optional story page at `/welcome`, removes the demo sign-out control, and keeps staff access behind the separate PIN-protected `/panel/` and server-side API. It also updates the menu category copy, removes the unverified crown/highest-price marker, clarifies that WhatsApp reservations still need to be sent and confirmed, and replaces the newsletter's simulated success with a consent-based database signup. For link previews, `og-image.jpg` is the 1200×630 share image referenced by the root page's Open Graph and Twitter Card metadata.
 
-## Deploy through your linked GitHub repo
+## Deploy
 
-1. Download/extract this ZIP.
-2. In `arpankgan-byte/GOLPO-SOLPO`, replace the current site HTML with the included `index.html` at the repository root. Keep the supplied `api/`, `order/`, `panel/`, and `package.json` paths at the repo root.
-3. Commit/push to the production branch (`main`). Vercel should build a deployment automatically.
-4. Test `https://golpo-solpo-2.vercel.app/order/` by sending a test order. Then open `https://golpo-solpo-2.vercel.app/panel/` and enter the panel PIN.
+Copy the complete contents of this project folder into the root of the linked `arpankgan-byte/GOLPO-SOLPO` repository, then commit and push to `main` (or upload the contents to the existing Vercel project). Keep the existing Vercel/Neon environment variables configured:
 
-## Environment variables
+- `DATABASE_URL` — Neon database connection string (used by both ordering and newsletter APIs).
+- `ADMIN_PIN` — private staff-panel PIN. Never place either value in browser code or commit it to Git.
 
-Vercel project environment needs `DATABASE_URL` from the Neon integration and `ADMIN_PIN` set to a private value. Do not put secrets in client-side files or commit them. The API rejects panel reads and status changes without the PIN. Configure `ADMIN_PIN` in Vercel → Project → Settings → Environment Variables, then redeploy if needed.
+The order and newsletter tables are created automatically on their first API request. Verify that the Vercel deployment has the Neon `DATABASE_URL` environment variable in the Production environment before testing signups/orders.
 
-## Notes
+## Newsletter limitation
 
-The customer menu contains eight signature dishes with prices listed on the site; add the remaining menu entries in both `api/orders.js` and `order/index.html` as desired. Payments are not included. This creates a website order request and kitchen panel; it does not process online payments. A customer can select tables 1–12; per-table QR links can use `/order/?table=1`, `/order/?table=2`, etc.
+Consent and email addresses are stored in Neon (`newsletter_subscribers`). The site does **not** send confirmation emails or marketing campaigns: no email delivery provider/credentials are configured. The signup message therefore reports that the address was saved, not that an email was sent. Subscriber addresses are not public; the newsletter API's GET list requires the staff PIN.
+
+## Reservation limitation
+
+The reservation form opens a prefilled WhatsApp message. The guest must send it in WhatsApp, and the restaurant must confirm availability. The website does not claim to send or confirm a booking.
+
+## Routes and checks
+
+- `/` — public restaurant homepage; menu, opening hours, phone, reservation and order actions.
+- `/welcome` — optional long-form welcome/story experience.
+- `/order/` — table ordering (QR links may use `/order/?table=1`, `/order/?table=2`, etc.).
+- `/panel/` — staff order panel protected by `ADMIN_PIN`.
+- `/api/orders` — order API; staff reads/status changes require the PIN.
+- `/api/subscribe` — consent-based signup; subscriber list reads require the PIN.
+- `robots.txt` and `sitemap.xml` — basic search-engine discovery; the panel and API are excluded from indexing.
+
+Payments and email campaign delivery are not included.
