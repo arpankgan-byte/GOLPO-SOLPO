@@ -1,32 +1,25 @@
-# Golpo Solpo — public website and ordering update
+# Golpo Solpo — public website update
 
-This package opens with the welcome/story experience, then uses the site's existing demo login screen before entering the restaurant homepage. Staff access remains separate at the PIN-protected `/panel/` and server-side API. The front-end demo login is not secure authentication and must not be used to protect private data. It also updates the menu category copy, removes the unverified crown/highest-price marker, clarifies that WhatsApp reservations still need to be sent and confirmed, and replaces the newsletter's simulated success with a consent-based database signup. The welcome page uses a single blue/black theme with no theme switcher. The `/order/` and `/panel/` music buttons use a blue/black animated liquid-gradient effect, with reduced-motion support. Order-from-table and Back-to-website links use the same double-stairs route transition. The transition includes the four-square morph loader; blue divider lines are removed. For link previews, `og-image.jpg` is the 1200×630 share image referenced by the root page's Open Graph and Twitter Card metadata. The 12 table QR cards are in `table-qr-codes/`, with a printable sheet at `Golpo-Solpo-12-Table-QR-Codes.pdf`. Each QR starts at `/welcome?table=N`; the selected table is retained through welcome → login → homepage and appended to the order link.
+The homepage opens directly for customers without a login. The short, optional `/welcome` intro has three sections and a clear **Skip intro** link. Normal visitor authentication has been removed; the staff dashboard remains protected by `ADMIN_PIN` and the order API.
+
+The site uses a consistent blue/black palette. Music is optional and only starts after a visitor presses its music button. The `/order/` and `/panel/` buttons retain their subtle animated treatment. The welcome, homepage, order and back-to-home route changes use the stairs transition with a morph loader; blue divider lines are removed. Reduced-motion settings are respected.
+
+The newsletter signup and its API have been removed because no email campaign delivery is configured. Reservation requests open a prefilled WhatsApp message and remain pending until the guest sends it and the restaurant confirms. They are not shown as confirmed by the site.
 
 ## Deploy
 
-Copy the complete contents of this project folder into the root of the linked `arpankgan-byte/GOLPO-SOLPO` repository, then commit and push to `main` (or upload the contents to the existing Vercel project). Keep the existing Vercel/Neon environment variables configured:
+Copy this project folder's contents to the root of the linked `arpankgan-byte/GOLPO-SOLPO` repository, commit and push to `main`, then wait for Vercel to deploy. Keep these server environment variables configured; never put them in browser files or Git:
 
-- `DATABASE_URL` — Neon database connection string (used by both ordering and newsletter APIs).
-- `ADMIN_PIN` — private staff-panel PIN. Never place either value in browser code or commit it to Git.
+- `DATABASE_URL` — Neon connection used by the orders API.
+- `ADMIN_PIN` — staff-panel PIN.
 
-The order and newsletter tables are created automatically on their first API request. Verify that the Vercel deployment has the Neon `DATABASE_URL` environment variable in the Production environment before testing signups/orders.
+## Routes and files
 
-## Newsletter limitation
+- `/` — public homepage with menu, hours, location and order/reservation actions.
+- `/welcome` — optional three-section intro; Skip intro goes to the homepage/menu.
+- `/order/?table=N` — table order page with a table preselected. The 12 QR codes target these pages directly.
+- `/panel/` — PIN-protected staff panel.
+- `og-image.jpg`, `favicon.png`, `favicon.ico` — link-preview and browser icon assets.
+- `Golpo-Solpo-12-Table-QR-Codes.pdf` and `table-qr-codes/` — printable sheet and individual table QR images.
 
-Consent and email addresses are stored in Neon (`newsletter_subscribers`). The site does **not** send confirmation emails or marketing campaigns: no email delivery provider/credentials are configured. The signup message therefore reports that the address was saved, not that an email was sent. Subscriber addresses are not public; the newsletter API's GET list requires the staff PIN.
-
-## Reservation limitation
-
-The reservation form opens a prefilled WhatsApp message. The guest must send it in WhatsApp, and the restaurant must confirm availability. The website does not claim to send or confirm a booking.
-
-## Routes and checks
-
-- `/` — opens the welcome/story experience.
-- `/welcome` — welcome/story experience; optional `?table=N` carries table context through login to the order page.
-- `/order/` — table ordering (QR links may use `/order/?table=1`, `/order/?table=2`, etc.).
-- `/panel/` — staff order panel protected by `ADMIN_PIN`.
-- `/api/orders` — order API; staff reads/status changes require the PIN.
-- `/api/subscribe` — consent-based signup; subscriber list reads require the PIN.
-- `robots.txt` and `sitemap.xml` — basic search-engine discovery; the panel and API are excluded from indexing.
-
-Payments and email campaign delivery are not included.
+The QR print sheet is also supplied separately as `Golpo-Solpo-12-table-QRs.zip`. Payments and email marketing are not included.
