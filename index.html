@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Golpo Solpo</title><meta name="description" content="Bengali favourites, biryani, tandoori, Chinese and rolls at Golpo Solpo in Bamangram, West Bengal. Open daily 10 AM–10 PM."><link rel="canonical" href="https://golpo-solpo-2.vercel.app/"><meta property="og:title" content="Golpo Solpo — Good food, good golpo"><meta property="og:description" content="Bengali favourites, biryani, tandoori and more in Bamangram."><meta property="og:type" content="website"><meta property="og:url" content="https://golpo-solpo-2.vercel.app/"><meta property="og:image" content="https://golpo-solpo-2.vercel.app/og-image.jpg"><meta property="og:image:secure_url" content="https://golpo-solpo-2.vercel.app/og-image.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Chicken biryani served in a traditional pot at Golpo Solpo"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Golpo Solpo — Good food, good golpo"><meta name="twitter:description" content="Bengali favourites, biryani, tandoori and more in Bamangram."><meta name="twitter:image" content="https://golpo-solpo-2.vercel.app/og-image.jpg"><meta name="twitter:image:alt" content="Chicken biryani served in a traditional pot at Golpo Solpo"><link rel="icon" type="image/png" sizes="128x128" href="/favicon.png?v=2"><link rel="shortcut icon" href="/favicon.ico?v=2"><link rel="apple-touch-icon" href="/favicon.png?v=2">
 <style>html,body{height:100%;margin:0;background:#0b0225}iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}</style><style>
 .gs-page-transition{position:fixed;inset:0;z-index:2147483647;display:flex;overflow:hidden;pointer-events:none}
-.gs-page-transition__column{height:100%;flex:1;background:#171512;border-right:1px solid rgba(255,255,255,.08);will-change:transform}
+.gs-page-transition__column{height:100%;flex:1;background:#000;border-right:1px solid #1d4ed8;will-change:transform}
 .gs-page-transition__column:last-child{border-right:0}
 @media(prefers-reduced-motion:reduce){.gs-page-transition{display:none!important}}
 </style></head><body>
@@ -289,6 +289,50 @@ else if(h==="404")go("404");
 else if(h==="home"||h==="login")go(h);
 else go("welcome");
 </script>
-<a href="/order/" aria-label="Order online from Golpo Solpo" style="position:fixed;right:20px;bottom:20px;z-index:2147483647;display:inline-flex;align-items:center;gap:9px;background:#4c2780;color:#fff;text-decoration:none;padding:13px 19px;border-radius:999px;font:700 14px system-ui,Arial;box-shadow:0 8px 26px #160a2c55;border:1px solid #ffffff55">🍽️ Order from your table</a>
+<a id="gsOrderCta" href="/order/" aria-label="Order online from Golpo Solpo" style="position:fixed;right:20px;bottom:20px;z-index:2147483647;display:inline-flex;align-items:center;gap:9px;background:#4c2780;color:#fff;text-decoration:none;padding:13px 19px;border-radius:999px;font:700 14px system-ui,Arial;box-shadow:0 8px 26px #160a2c55;border:1px solid #ffffff55">🍽️ Order from your table</a>
 <script>(function(){var t=new URLSearchParams(location.search).get("table");if(/^(?:[1-9]|1[0-2])$/.test(t||"")){var a=document.querySelector('a[aria-label="Order online from Golpo Solpo"]');if(a)a.href="/order/?table="+t}})();</script>
+<script>
+(()=>{
+ const KEY="gs-stairs-route-pending";
+ const reduced=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}};
+ function build(arrival){
+  const stage=document.createElement("div");stage.className="gs-page-transition";stage.setAttribute("aria-hidden","true");
+  const cols=[];
+  for(let i=0;i<5;i++){
+   const c=document.createElement("div");c.className="gs-page-transition__column";
+   c.style.transform=arrival?"translateY(0%)":(i%2===0?"translateY(-100%)":"translateY(100%)");
+   stage.appendChild(c);cols.push(c);
+  }
+  document.body.appendChild(stage);return{stage,cols};
+ }
+ function animate(cols,enter){
+  const jobs=cols.map((c,i)=>{
+   const from=enter?(i%2===0?"translateY(-100%)":"translateY(100%)"):"translateY(0%)";
+   const to=enter?"translateY(0%)":(i%2===0?"translateY(-100%)":"translateY(100%)");
+   if(!c.animate)return Promise.resolve();
+   return c.animate([{transform:from},{transform:to}],{duration:700,delay:i*50,easing:"cubic-bezier(.76,0,.24,1)",fill:"forwards"}).finished.catch(()=>{});
+  });
+  return Promise.all(jobs);
+ }
+ function navigate(e){
+  const a=e.target.closest&&e.target.closest("a[href]");if(!a)return;
+  const target=a.id==="gsOrderCta"||a.classList.contains("back-site")||a.classList.contains("brand-back");
+  if(!target)return;
+  if(reduced()||!Element.prototype.animate)return;
+  e.preventDefault();const href=a.href;
+  try{sessionStorage.setItem(KEY,"1")}catch(x){}
+  const {cols}=build(false);let sent=false;
+  const go=()=>{if(sent)return;sent=true;location.assign(href)};
+  animate(cols,true).then(go);setTimeout(go,1250);
+ }
+ function arrive(){
+  let pending=false;try{pending=sessionStorage.getItem(KEY)==="1";sessionStorage.removeItem(KEY)}catch(e){}
+  if(!pending||reduced())return;
+  const {stage,cols}=build(true);let done=false;
+  const reveal=()=>{if(done)return;done=true;animate(cols,false).then(()=>stage.remove());};
+  window.addEventListener("load",reveal,{once:true});setTimeout(reveal,1800);
+ }
+ document.addEventListener("click",navigate,true);arrive();
+})();
+</script>
 </body></html>
