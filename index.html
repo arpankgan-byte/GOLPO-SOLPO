@@ -288,15 +288,17 @@ function go(n,hash){
 function route(href){
   var m=/^\/(home|login|welcome)?\/?(?:#(.*))?$/.exec(href||"/");
   if(!m||/404/.test(href))return go("404");
-  go(m[1]==="login"?"home":(m[1]||"home"),m[2]);
+  var target=m[1]||(m[2]&&m[2]!=="welcome"?"home":"welcome");
+  go(target==="login"?"home":target,m[2]);
 }
 addEventListener("message",function(e){if(e.source===f.contentWindow&&e.data&&e.data.gs)route(e.data.href)});
 var h=(location.hash||"").slice(1),path=location.pathname.replace(/\/+$/,"");
 if(path==="/welcome"||h==="welcome")go("welcome");
 else if(h==="404")go("404");
-else go("home",h&&h!=="home"?h:null);
+else if(path==="/home"||path==="/login"||h)go("home",h&&h!=="home"?h:null);
+else go("welcome");
 </script>
-<a id="gsOrderCta" href="/order/" aria-label="Order online from Golpo Solpo" style="position:fixed;right:20px;bottom:20px;z-index:2147483647;display:inline-flex;align-items:center;gap:9px;background:#4c2780;color:#fff;text-decoration:none;padding:13px 19px;border-radius:999px;font:700 14px system-ui,Arial;box-shadow:0 8px 26px #160a2c55;border:1px solid #ffffff55">🍽️ Order from your table</a>
+<a id="gsOrderCta" href="/order/" aria-label="Order online from Golpo Solpo" style="position:fixed;right:20px;bottom:20px;z-index:2147483647;display:inline-flex;align-items:center;gap:9px;background:#1d4ed8;color:#fff;text-decoration:none;padding:13px 19px;border-radius:999px;font:700 14px system-ui,Arial;box-shadow:0 8px 26px #160a2c55;border:1px solid #ffffff55">🍽️ Order from your table</a>
 <script>(function(){var t=new URLSearchParams(location.search).get("table");if(/^(?:[1-9]|1[0-2])$/.test(t||"")){var a=document.querySelector('a[aria-label="Order online from Golpo Solpo"]');if(a)a.href="/order/?table="+t}})();</script>
 <script>
 (()=>{
