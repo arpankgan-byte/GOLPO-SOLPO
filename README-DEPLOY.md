@@ -1,6 +1,6 @@
 # Golpo Solpo — public website update
 
-The homepage opens directly for customers without a login. The short, optional `/welcome` intro has three sections and a clear **Skip intro** link. Normal visitor authentication has been removed; the staff dashboard remains protected by `ADMIN_PIN` and the order API.
+The homepage opens directly for customers without a login. The full animated `/welcome` story is available as an optional route, with a visible **Skip intro** link to the menu. Normal visitor authentication has been removed; the staff dashboard remains protected by `ADMIN_PIN` and the order API.
 
 The site uses a consistent blue/black palette. Music is optional and only starts after a visitor presses its music button. The `/order/` and `/panel/` buttons retain their subtle animated treatment. The welcome, homepage, order and back-to-home route changes use the stairs transition with a morph loader; blue divider lines are removed. Reduced-motion settings are respected.
 
