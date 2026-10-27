@@ -22,7 +22,7 @@ let pin=sessionStorage.getItem('gs-admin-pin')||'';const esc=s=>String(s).replac
 <script>(()=>{const audio=document.getElementById('gsAudio'),btn=document.getElementById('gsMusic'),KEY='gs-music';let optedOut=false;try{optedOut=localStorage.getItem(KEY)==='off'}catch(e){}function label(){const on=!audio.paused;btn.textContent=on?'♫ Music on · turn off':'♫ Play music';btn.classList.toggle('playing',on);btn.setAttribute('aria-pressed',String(on))}let audioCtx=null;function enhanceAudio(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!audioCtx){audioCtx=new AC();const src=audioCtx.createMediaElementSource(audio);const low=audioCtx.createBiquadFilter();low.type='highpass';low.frequency.value=70;const presence=audioCtx.createBiquadFilter();presence.type='peaking';presence.frequency.value=3200;presence.Q.value=0.85;presence.gain.value=2.2;const air=audioCtx.createBiquadFilter();air.type='highshelf';air.frequency.value=7200;air.gain.value=2.5;const comp=audioCtx.createDynamicsCompressor();comp.threshold.value=-25;comp.knee.value=12;comp.ratio.value=1.7;comp.attack.value=.008;comp.release.value=.18;src.connect(low);low.connect(presence);presence.connect(air);air.connect(comp);comp.connect(audioCtx.destination)}if(audioCtx.state==='suspended')audioCtx.resume()}catch(e){audioCtx=null}}async function play(){if(optedOut)return;audio.volume=.42;enhanceAudio();try{await audio.play();label()}catch(e){label()}}function toggle(){if(!audio.paused){audio.pause();optedOut=true;try{localStorage.setItem(KEY,'off')}catch(e){}label()}else{optedOut=false;try{localStorage.removeItem(KEY)}catch(e){}play()}}btn.addEventListener('click',toggle);document.addEventListener('pointerdown',e=>{if(!e.target.closest('#gsMusic'))play()},{once:true});document.addEventListener('keydown',play,{once:true});audio.addEventListener('play',label);audio.addEventListener('pause',label);label()})();</script>
 <script>
 (()=>{
- const KEY="gs-stairs-route-pending";
+ const KEY="gs-stairs-route-pending";let routeBusy=false;
  const reduced=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}};
  function build(arrival){
   const stage=document.createElement("div");stage.className="gs-page-transition";stage.setAttribute("aria-hidden","false");
@@ -48,12 +48,13 @@ let pin=sessionStorage.getItem('gs-admin-pin')||'';const esc=s=>String(s).replac
   const a=e.target.closest&&e.target.closest("a[href]");if(!a)return;
   const target=a.id==="gsOrderCta"||a.classList.contains("back-site")||a.classList.contains("brand-back");
   if(!target)return;
+  if(routeBusy){e.preventDefault();return}
   if(reduced()||!Element.prototype.animate)return;
-  e.preventDefault();const href=a.href;
+  e.preventDefault();routeBusy=true;const href=a.href;
   try{sessionStorage.setItem(KEY,"1")}catch(x){}
   const {cols}=build(false);let sent=false;
   const go=()=>{if(sent)return;sent=true;location.assign(href)};
-  animate(cols,true).then(go);setTimeout(go,1250);
+  animate(cols,true).then(go);setTimeout(go,1250);setTimeout(()=>{routeBusy=false},5000);
  }
  function arrive(){
   let pending=false;try{pending=sessionStorage.getItem(KEY)==="1";sessionStorage.removeItem(KEY)}catch(e){}
