@@ -19,7 +19,9 @@ Copy this project folder's contents to the root of the linked `arpankgan-byte/GO
 - `/home` — public homepage with menu, hours, location and order/reservation actions; no customer login.
 - `/order/?table=N` — table order page with a table preselected. The 12 QR codes target these pages directly.
 - `/panel/` — PIN-protected staff panel.
+- Unknown or removed URLs — Vercel serves the branded `404.html` response with HTTP 404; the page links back to the welcome, menu and ordering pages.
 - `og-image.jpg`, `favicon.png`, `favicon.ico` — link-preview and browser icon assets.
 - `Golpo-Solpo-12-Table-QR-Codes.pdf` and `table-qr-codes/` — printable sheet and individual table QR images.
+- `REACT-COMPONENT-SETUP.md` — explains that this deployment is static, documents the optional Next/shadcn setup, and clarifies that the TSX source is not compiled by the current site.
 
 The QR print sheet is also supplied separately as `Golpo-Solpo-12-table-QRs.zip`. Payments and email marketing are not included.
