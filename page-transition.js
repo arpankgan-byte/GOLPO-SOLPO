@@ -1,5 +1,6 @@
 (() => {
   const KEY = "gs-stairs-route-pending";
+  const MUSIC_KEY = "gs-transition-resume-bg";
   let routeBusy = false;
   let sequence = 0;
   let revealAudio = null;
@@ -23,6 +24,26 @@
       console.warn("Reveal music could not autoplay:", error);
     }
   }
+  function preparePageMusic() {
+    const audio = document.getElementById("gsAudio");
+    const wasPlaying = !!audio && !audio.paused;
+    if (wasPlaying) audio.pause();
+    try { sessionStorage.setItem(MUSIC_KEY, wasPlaying ? "1" : "0"); } catch {}
+  }
+  function resumePageMusic() {
+    let shouldResume = false;
+    try {
+      shouldResume = sessionStorage.getItem(MUSIC_KEY) === "1";
+      sessionStorage.removeItem(MUSIC_KEY);
+    } catch {}
+    if (!shouldResume) return;
+    const audio = document.getElementById("gsAudio");
+    if (!audio) return;
+    audio.volume = 0.42;
+    const play = audio.play();
+    if (play?.catch) play.catch((error) => console.warn("Page music could not resume:", error));
+  }
+
   const reduced = () => {
     try { return matchMedia("(prefers-reduced-motion: reduce)").matches; }
     catch { return false; }
@@ -111,7 +132,11 @@
       pending = sessionStorage.getItem(KEY) === "1";
       sessionStorage.removeItem(KEY);
     } catch {}
-    if (!pending || reduced()) return;
+    if (!pending || reduced()) {
+      window.addEventListener("load", resumePageMusic, { once: true });
+      setTimeout(resumePageMusic, 1800);
+      return;
+    }
     const { stage, cols } = build(true);
     let done = false;
     const reveal = () => {
@@ -119,7 +144,10 @@
       done = true;
       const loader = stage.querySelector(".gs-page-transition__loader");
       if (loader) loader.remove();
-      animate(cols, false).then(() => stage.remove());
+      animate(cols, false).then(() => {
+        stage.remove();
+        resumePageMusic();
+      });
     };
     window.addEventListener("load", reveal, { once: true });
     setTimeout(reveal, 4500);
@@ -137,6 +165,8 @@
     try { url = new URL(a.href, location.href); } catch { return; }
     if (url.origin !== location.origin || url.pathname === location.pathname) return;
     if (reduced() || !Element.prototype.animate) return;
+    if (routeBusy) { event.preventDefault(); return; }
+    preparePageMusic();
     startRevealMusic();
     event.preventDefault();
     navigate(url.href);
