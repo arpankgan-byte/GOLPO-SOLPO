@@ -2,7 +2,7 @@
 
 The root URL `/` opens the full animated welcome story, with a visible **Skip intro** link. The public homepage and menu are at `/home`; customers need no login. Normal visitor authentication has been removed; the staff dashboard remains protected by `ADMIN_PIN` and the order API.
 
-The site uses a consistent blue/black palette. Music is optional and only starts after a visitor presses its music button. The `/order/` and `/panel/` buttons retain their subtle animated treatment. The welcome, homepage, order and back-to-home route changes use the stairs transition with a morph loader; blue divider lines are removed. Reduced-motion settings are respected.
+The site uses a consistent blue/black palette. The homepage currently displays the supplied Golpo Solpo logo as a static image. The supplied React liquid-glass component is stored as source under `components/ui/`, but this static deployment does not compile or run TSX. Music is optional and only starts after a visitor presses its music button. The `/order/` and `/panel/` buttons retain their subtle animated treatment. The welcome, homepage, order and back-to-home route changes use the stairs transition with a morph loader; blue divider lines are removed. Reduced-motion settings are respected.
 
 The newsletter signup and its API have been removed because no email campaign delivery is configured. Reservation requests open a prefilled WhatsApp message and remain pending until the guest sends it and the restaurant confirms. They are not shown as confirmed by the site.
 
@@ -22,6 +22,11 @@ Copy this project folder's contents to the root of the linked `arpankgan-byte/GO
 - Unknown or removed URLs — Vercel serves the branded `404.html` response with HTTP 404; the page links back to the welcome, menu and ordering pages.
 - `og-image.jpg`, `favicon.png`, `favicon.ico` — link-preview and browser icon assets.
 - `Golpo-Solpo-12-Table-QR-Codes.pdf` and `table-qr-codes/` — printable sheet and individual table QR images.
-- `REACT-COMPONENT-SETUP.md` — explains that this deployment is static, documents the optional Next/shadcn setup, and clarifies that the TSX source is not compiled by the current site.
+- `README-LIQUID-GLASS-SETUP.md` — documents the supplied React/WebGL component and a separate Next.js + TypeScript + Tailwind + shadcn setup. The current static site does not compile the TSX.
 
 The QR print sheet is also supplied separately as `Golpo-Solpo-12-table-QRs.zip`. Payments and email marketing are not included.
+
+
+## Liquid-glass component
+
+The exact React/WebGL component and demo source are under `components/ui/`. They are not active in production until the site is migrated to a React build. See `README-LIQUID-GLASS-SETUP.md`.
