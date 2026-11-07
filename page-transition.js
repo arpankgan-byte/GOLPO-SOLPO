@@ -122,7 +122,7 @@
       animate(cols, false).then(() => stage.remove());
     };
     window.addEventListener("load", reveal, { once: true });
-    setTimeout(reveal, 1800);
+    setTimeout(reveal, 4500);
   }
 
   // Keep the table QR context when returning from ordering or the kitchen panel.
