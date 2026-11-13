@@ -1,6 +1,6 @@
 # Golpo Solpo — public website update
 
-The root URL `/` opens the full animated welcome story, with a visible **Skip intro** link. The public homepage and menu are at `/home`; customers need no login. Normal visitor authentication has been removed; the staff dashboard remains protected by `ADMIN_PIN` and the order API.
+First-time visits to `/`, `/welcome` or `/home` show the restaurant rules before continuing to `/welcome`; a **Skip rules & continue** button proceeds immediately. Direct table-order visits load the order page first, then show the rules for 30 seconds before returning to that same table order. The same skip button bypasses the wait. The root URL `/` opens the full animated welcome story, with a visible **Skip intro** link. The public homepage and menu are at `/home`; customers need no login. Normal visitor authentication has been removed; the staff dashboard remains protected by `ADMIN_PIN` and the order API.
 
 The site uses a consistent blue/black palette. The homepage currently displays the supplied Golpo Solpo logo as a static image. The supplied React liquid-glass component is stored as source under `components/ui/`, but this static deployment does not compile or run TSX. Music is optional and only starts after a visitor presses its music button. The `/order/` and `/panel/` buttons retain their subtle animated treatment. The welcome, homepage, order and back-to-home route changes use the stairs transition with a morph loader; blue divider lines are removed. Reduced-motion settings are respected.
 
@@ -15,6 +15,7 @@ Copy this project folder's contents to the root of the linked `arpankgan-byte/GO
 
 ## Routes and files
 
+- `/rules/` — house rules and Continue/Skip control. `/`, `/welcome` and `/home` route first-time visitors through rules; `/order/?table=N` shows rules after menu initialization for 30 seconds, then returns to the same table order unless skipped.
 - `/` and `/welcome` — full animated welcome story; Skip intro goes to the homepage/menu.
 - `/home` — public homepage with menu, hours, location and order/reservation actions; no customer login.
 - `/order/?table=N` — table order page with a table preselected. The 12 QR codes target these pages directly.

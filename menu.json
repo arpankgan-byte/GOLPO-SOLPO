@@ -310,5 +310,11 @@
     "category": "Beverages",
     "name": "Masala Cold Drink",
     "price": 50
+  },
+  {
+    "id": 53,
+    "category": "Starters",
+    "name": "Special Mix Chowmin",
+    "price": 120
   }
 ]
