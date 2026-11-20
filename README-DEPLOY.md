@@ -10,7 +10,8 @@ The newsletter signup and its API have been removed because no email campaign de
 
 Copy this project folder's contents to the root of the linked `arpankgan-byte/GOLPO-SOLPO` repository, commit and push to `main`, then wait for Vercel to deploy. Keep these server environment variables configured; never put them in browser files or Git:
 
-- `DATABASE_URL` — Neon connection used by the orders API.
+- `SUPABASE_URL` — Supabase project URL for the orders API.
+- `SUPABASE_SERVICE_ROLE_KEY` — sensitive server-only key; never expose in browser files or Git.
 - `ADMIN_PIN` — staff-panel PIN.
 
 ## Routes and files
@@ -18,7 +19,7 @@ Copy this project folder's contents to the root of the linked `arpankgan-byte/GO
 - `/rules/` — house rules and Continue/Skip control. `/`, `/welcome` and `/home` route first-time visitors through rules; `/order/?table=N` shows rules after menu initialization for 30 seconds, then returns to the same table order unless skipped.
 - `/` and `/welcome` — full animated welcome story; Skip intro goes to the homepage/menu.
 - `/home` — public homepage with menu, hours, location and order/reservation actions; no customer login.
-- `/order/?table=N` — table order page with a table preselected. The 12 QR codes target these pages directly.
+- `/order/?table=N` — table order page with a table preselected. The 12 table QR codes open `/welcome?table=N` first, then carry the table choice through to ordering.
 - `/panel/` — PIN-protected staff panel.
 - Unknown or removed URLs — Vercel serves the branded `404.html` response with HTTP 404; the page links back to the welcome, menu and ordering pages.
 - `og-image.jpg`, `favicon.png`, `favicon.ico` — link-preview and browser icon assets.
