@@ -1,5 +1,18 @@
 {
   "name": "golpo-solpo-orders",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "build:eye-tracker": "esbuild components/ui/eye-tracker-client.tsx --bundle --minify --format=iife --target=es2020 --outfile=eye-tracker.bundle.js"
+  }
 }
