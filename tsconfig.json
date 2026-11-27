@@ -26,8 +26,6 @@
     "components/ui/eye-tracker-client.tsx",
     "components/ui/dancing-letters.tsx",
     "components/ui/dancing-letters-client.tsx",
-    "lib/utils.ts",
-    "components/ui/loader-1.tsx",
-    "components/ui/loader-1-client.tsx"
+    "lib/utils.ts"
   ]
 }

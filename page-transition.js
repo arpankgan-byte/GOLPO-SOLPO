@@ -61,7 +61,7 @@
       stage.appendChild(col);
       cols.push(col);
     }
-    stage.insertAdjacentHTML("beforeend", '<div class="gs-page-transition__loader" role="status" aria-label="Loading page"><div data-pencil-loader-root></div></div>');
+    stage.insertAdjacentHTML("beforeend", '<div class="gs-page-transition__loader" role="status" aria-label="Loading page"><div class="gs-morph-loading" aria-hidden="true"><span></span><span></span><span></span><span></span></div></div>');
     document.body.appendChild(stage);
     return { stage, cols };
   }
@@ -72,7 +72,7 @@
       const to = enter ? "translateY(0%)" : (i % 2 === 0 ? "translateY(-100%)" : "translateY(100%)");
       if (!col.animate) return Promise.resolve();
       return col.animate([{ transform: from }, { transform: to }], {
-        duration: 420, delay: i * 35, easing: "cubic-bezier(.76,0,.24,1)", fill: "forwards"
+        duration: 700, delay: i * 50, easing: "cubic-bezier(.76,0,.24,1)", fill: "forwards"
       }).finished.catch(() => {});
     }));
   }
@@ -111,7 +111,6 @@
     if (routeBusy) return;
     routeBusy = true;
     const token = ++sequence;
-    const loaderStart = performance.now();
     const { stage, cols } = build(false);
     let sent = false;
     const go = () => {
@@ -122,10 +121,9 @@
     };
     animate(cols, true).then(() => {
       if (sent) return;
-      const hold = Math.max(0, 500 - (performance.now() - loaderStart));
-      setTimeout(() => playGlass(stage, token, go), hold);
+      playGlass(stage, token, go);
     });
-    setTimeout(go, 4500);
+    setTimeout(go, 7000);
   }
 
   function arrive() {
@@ -139,7 +137,6 @@
       setTimeout(resumePageMusic, 1800);
       return;
     }
-    const loaderStart = performance.now();
     const { stage, cols } = build(true);
     let done = false;
     const reveal = () => {
@@ -152,9 +149,8 @@
         resumePageMusic();
       });
     };
-    const scheduleReveal = () => setTimeout(reveal, Math.max(0, 500 - (performance.now() - loaderStart)));
-    window.addEventListener("load", scheduleReveal, { once: true });
-    setTimeout(scheduleReveal, 2500);
+    window.addEventListener("load", reveal, { once: true });
+    setTimeout(reveal, 4500);
   }
 
   // Keep the table QR context when returning from ordering or the kitchen panel.
