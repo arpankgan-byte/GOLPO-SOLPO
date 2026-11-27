@@ -18,6 +18,7 @@
   "scripts": {
     "build:eye-tracker": "esbuild components/ui/eye-tracker-client.tsx --bundle --minify --format=iife --target=es2020 --outfile=eye-tracker.bundle.js",
     "build:dancing-letters": "esbuild components/ui/dancing-letters-client.tsx --bundle --minify --format=iife --target=es2020 --outfile=dancing-letters.bundle.js",
-    "build:site-ui": "npm run build:eye-tracker && npm run build:dancing-letters"
+    "build:pencil-loader": "esbuild components/ui/loader-1-client.tsx --bundle --minify --format=iife --target=es2020 --outfile=pencil-loader.bundle.js",
+    "build:site-ui": "npm run build:eye-tracker && npm run build:dancing-letters && npm run build:pencil-loader"
   }
 }

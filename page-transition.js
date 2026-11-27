@@ -61,7 +61,7 @@
       stage.appendChild(col);
       cols.push(col);
     }
-    stage.insertAdjacentHTML("beforeend", '<div class="gs-page-transition__loader" role="status" aria-label="Loading page"><div class="gs-morph-loading" aria-hidden="true"><span></span><span></span><span></span><span></span></div></div>');
+    stage.insertAdjacentHTML("beforeend", '<div class="gs-page-transition__loader" role="status" aria-label="Loading page"><div data-pencil-loader-root></div></div>');
     document.body.appendChild(stage);
     return { stage, cols };
   }
@@ -111,6 +111,7 @@
     if (routeBusy) return;
     routeBusy = true;
     const token = ++sequence;
+    const loaderStart = performance.now();
     const { stage, cols } = build(false);
     let sent = false;
     const go = () => {
@@ -121,7 +122,8 @@
     };
     animate(cols, true).then(() => {
       if (sent) return;
-      playGlass(stage, token, go);
+      const hold = Math.max(0, 1250 - (performance.now() - loaderStart));
+      setTimeout(() => playGlass(stage, token, go), hold);
     });
     setTimeout(go, 7000);
   }
@@ -137,6 +139,7 @@
       setTimeout(resumePageMusic, 1800);
       return;
     }
+    const loaderStart = performance.now();
     const { stage, cols } = build(true);
     let done = false;
     const reveal = () => {
@@ -149,8 +152,9 @@
         resumePageMusic();
       });
     };
-    window.addEventListener("load", reveal, { once: true });
-    setTimeout(reveal, 4500);
+    const scheduleReveal = () => setTimeout(reveal, Math.max(0, 1250 - (performance.now() - loaderStart)));
+    window.addEventListener("load", scheduleReveal, { once: true });
+    setTimeout(scheduleReveal, 4500);
   }
 
   // Keep the table QR context when returning from ordering or the kitchen panel.
