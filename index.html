@@ -289,18 +289,17 @@ function go(n,hash){
     var arrival=document.createElement("div");arrival.className="gs-page-transition";arrival.setAttribute("aria-hidden","true");
     var arrivalCols=[];for(var ai=0;ai<5;ai++){var ac=document.createElement("div");ac.className="gs-page-transition__column";ac.style.transform="translateY(0%)";arrival.appendChild(ac);arrivalCols.push(ac)}
     arrival.insertAdjacentHTML("beforeend",'<div class="gs-page-transition__loader" role="status" aria-label="Loading page"><div data-pencil-loader-root></div></div>');document.body.appendChild(arrival);transitionLayer=arrival;
-    var arrived=false,arrivalReady=false,arrivalStart=performance.now();function revealArrival(){if(arrived)return;arrived=true;var ld=arrival.querySelector(".gs-page-transition__loader");if(ld)ld.remove();var outs=arrivalCols.map(function(col,i){return col.animate([{transform:"translateY(0%)"},{transform:i%2===0?"translateY(-100%)":"translateY(100%)"}],{duration:700,delay:i*50,easing:"cubic-bezier(.76,0,.24,1)",fill:"forwards"}).finished.catch(function(){})});Promise.all(outs).then(function(){arrival.remove();if(transitionLayer===arrival)transitionLayer=null;startHomeLogo();resumeTransitionMusic()})}
-    function scheduleArrival(){if(arrivalReady)return;arrivalReady=true;setTimeout(revealArrival,Math.max(0,1250-(performance.now()-arrivalStart)))}f.onload=function(){f.onload=null;scheduleArrival()};setTimeout(scheduleArrival,1800);f.srcdoc=html(n);return;
+    var arrived=false,arrivalReady=false,arrivalStart=performance.now();function revealArrival(){if(arrived)return;arrived=true;var ld=arrival.querySelector(".gs-page-transition__loader");if(ld)ld.remove();var outs=arrivalCols.map(function(col,i){return col.animate([{transform:"translateY(0%)"},{transform:i%2===0?"translateY(-100%)":"translateY(100%)"}],{duration:420,delay:i*35,easing:"cubic-bezier(.76,0,.24,1)",fill:"forwards"}).finished.catch(function(){})});Promise.all(outs).then(function(){arrival.remove();if(transitionLayer===arrival)transitionLayer=null;startHomeLogo();resumeTransitionMusic()})}
+    function scheduleArrival(){if(arrivalReady)return;arrivalReady=true;setTimeout(revealArrival,Math.max(0,500-(performance.now()-arrivalStart)))}f.onload=function(){f.onload=null;scheduleArrival()};setTimeout(scheduleArrival,1800);f.srcdoc=html(n);return;
   }
   if(!prior||prior===n||reduce){if(transitionLayer){transitionLayer.remove();transitionLayer=null}load();return}
   prepareTransitionMusic();
   if(transitionLayer){transitionLayer.remove();transitionLayer=null}
   var stage=document.createElement("div");stage.className="gs-page-transition";stage.setAttribute("aria-hidden","false");
   var cols=[];for(var i=0;i<5;i++){var col=document.createElement("div");col.className="gs-page-transition__column";stage.appendChild(col);cols.push(col)}
-  var loaderStart=performance.now();
   stage.insertAdjacentHTML("beforeend",'<div class="gs-page-transition__loader" role="status" aria-label="Loading page"><div data-pencil-loader-root></div></div>');
   document.body.appendChild(stage);transitionLayer=stage;var loaderStart=performance.now();
-  var timing=function(i){return{duration:700,delay:i*50,easing:"cubic-bezier(.76,0,.24,1)",fill:"forwards"}};
+  var timing=function(i){return{duration:420,delay:i*35,easing:"cubic-bezier(.76,0,.24,1)",fill:"forwards"}};
   var cover=cols.map(function(col,i){return col.animate([{transform:i%2===0?"translateY(-100%)":"translateY(100%)"},{transform:"translateY(0%)"}],timing(i)).finished.catch(function(){})});
   Promise.all(cover).then(function(){
     if(gen!==transitionGeneration)return;
@@ -313,11 +312,11 @@ function go(n,hash){
     function loadDestination(){
       if(gen!==transitionGeneration)return;
       f.onload=function(){f.onload=null;if(hash){try{var el=f.contentDocument.getElementById(hash);if(el)el.scrollIntoView()}catch(e){}}if(transitionFinished)startHomeLogo();reveal()};
-      setTimeout(reveal,1800);
+      setTimeout(reveal,1000);
       f.srcdoc=html(n);
     }
     function playGlass(){
-      if(gen!==transitionGeneration)return;var remain=1250-(performance.now()-loaderStart);if(remain>0){setTimeout(playGlass,remain);return;}
+      if(gen!==transitionGeneration)return;var remain=500-(performance.now()-loaderStart);if(remain>0){setTimeout(playGlass,remain);return;}
       var loader=stage.querySelector(".gs-page-transition__loader");if(loader)loader.remove();
       var glass=document.createElement("iframe");glass.className="gs-page-transition__glass";glass.title="Liquid glass page transition";
       var finished=false,timer=0;
@@ -342,9 +341,9 @@ function navigateFullPage(href){
   for(var i=0;i<5;i++){var col=document.createElement("div");col.className="gs-page-transition__column";stage.appendChild(col);cols.push(col)}
   var loaderStart=performance.now();
   stage.insertAdjacentHTML("beforeend",'<div class="gs-page-transition__loader" role="status" aria-label="Loading page"><div data-pencil-loader-root></div></div>');document.body.appendChild(stage);
-  var cover=cols.map(function(col,i){return col.animate([{transform:i%2===0?"translateY(-100%)":"translateY(100%)"},{transform:"translateY(0%)"}],{duration:700,delay:i*50,easing:"cubic-bezier(.76,0,.24,1)",fill:"forwards"}).finished.catch(function(){})});
-  Promise.all(cover).then(function(){var remain=1250-(performance.now()-loaderStart);setTimeout(function(){var ld=stage.querySelector(".gs-page-transition__loader");if(ld)ld.remove();var glass=document.createElement("iframe");glass.className="gs-page-transition__glass";glass.title="Liquid glass page transition";var finished=false,timer;function cleanup(){window.removeEventListener("message",onMessage);clearTimeout(timer)}function finish(){if(finished)return;finished=true;cleanup();glass.remove();try{sessionStorage.setItem("gs-stairs-route-pending","1")}catch(e){}setTimeout(function(){location.assign(href)},400)}function onMessage(event){var d=event.data;if(event.source===glass.contentWindow&&d&&d.gsGlassTransitionDone&&String(d.token)===String(token))finish()}window.addEventListener("message",onMessage);timer=setTimeout(finish,5000);glass.src="/glass-transition/transition.html?token="+encodeURIComponent(String(token));stage.appendChild(glass)},Math.max(0,remain))});
-  setTimeout(function(){if(!fullRouteBusy)return;try{sessionStorage.setItem("gs-stairs-route-pending","1")}catch(e){}location.assign(href)},6500);
+  var cover=cols.map(function(col,i){return col.animate([{transform:i%2===0?"translateY(-100%)":"translateY(100%)"},{transform:"translateY(0%)"}],{duration:420,delay:i*35,easing:"cubic-bezier(.76,0,.24,1)",fill:"forwards"}).finished.catch(function(){})});
+  Promise.all(cover).then(function(){var remain=500-(performance.now()-loaderStart);setTimeout(function(){var ld=stage.querySelector(".gs-page-transition__loader");if(ld)ld.remove();var glass=document.createElement("iframe");glass.className="gs-page-transition__glass";glass.title="Liquid glass page transition";var finished=false,timer;function cleanup(){window.removeEventListener("message",onMessage);clearTimeout(timer)}function finish(){if(finished)return;finished=true;cleanup();glass.remove();try{sessionStorage.setItem("gs-stairs-route-pending","1")}catch(e){}setTimeout(function(){location.assign(href)},400)}function onMessage(event){var d=event.data;if(event.source===glass.contentWindow&&d&&d.gsGlassTransitionDone&&String(d.token)===String(token))finish()}window.addEventListener("message",onMessage);timer=setTimeout(finish,5000);glass.src="/glass-transition/transition.html?token="+encodeURIComponent(String(token));stage.appendChild(glass)},Math.max(0,remain))});
+  setTimeout(function(){if(!fullRouteBusy)return;try{sessionStorage.setItem("gs-stairs-route-pending","1")}catch(e){}location.assign(href)},4500);
 }
 var topRevealAudio=null;
 function startTopRevealMusic(){try{topRevealAudio=document.getElementById("gsRevealAudio")||topRevealAudio;if(!topRevealAudio){topRevealAudio=new Audio("/logo-reveal-music.wav");topRevealAudio.preload="auto"}topRevealAudio.volume=.24;if(topRevealAudio.readyState>=1){try{topRevealAudio.currentTime=0}catch(e){}}var play=topRevealAudio.play();if(play&&play.catch)play.catch(function(e){console.warn("Reveal music could not autoplay",e)})}catch(e){console.warn("Reveal music could not autoplay",e)}}

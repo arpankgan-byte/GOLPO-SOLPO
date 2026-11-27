@@ -72,7 +72,7 @@
       const to = enter ? "translateY(0%)" : (i % 2 === 0 ? "translateY(-100%)" : "translateY(100%)");
       if (!col.animate) return Promise.resolve();
       return col.animate([{ transform: from }, { transform: to }], {
-        duration: 700, delay: i * 50, easing: "cubic-bezier(.76,0,.24,1)", fill: "forwards"
+        duration: 420, delay: i * 35, easing: "cubic-bezier(.76,0,.24,1)", fill: "forwards"
       }).finished.catch(() => {});
     }));
   }
@@ -122,10 +122,10 @@
     };
     animate(cols, true).then(() => {
       if (sent) return;
-      const hold = Math.max(0, 1250 - (performance.now() - loaderStart));
+      const hold = Math.max(0, 500 - (performance.now() - loaderStart));
       setTimeout(() => playGlass(stage, token, go), hold);
     });
-    setTimeout(go, 7000);
+    setTimeout(go, 4500);
   }
 
   function arrive() {
@@ -152,9 +152,9 @@
         resumePageMusic();
       });
     };
-    const scheduleReveal = () => setTimeout(reveal, Math.max(0, 1250 - (performance.now() - loaderStart)));
+    const scheduleReveal = () => setTimeout(reveal, Math.max(0, 500 - (performance.now() - loaderStart)));
     window.addEventListener("load", scheduleReveal, { once: true });
-    setTimeout(scheduleReveal, 4500);
+    setTimeout(scheduleReveal, 2500);
   }
 
   // Keep the table QR context when returning from ordering or the kitchen panel.
